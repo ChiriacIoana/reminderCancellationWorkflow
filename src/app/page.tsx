@@ -1,8 +1,31 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import Image from "next/image";
+import { useAuth } from "../contexts/AuthContext";
+import { ProtectedRoute } from "../components/auth/ProtectedRoute";
+import { Button } from "../../components/ui/button";
+
+function HomeContent() {
+  const { user, logout } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
+      <div className="absolute top-4 right-4 flex items-center gap-4">
+        <span className="text-sm">
+          Welcome, {user?.firstName} {user?.lastName}!
+        </span>
+        <Button onClick={handleLogout} variant="outline" size="sm">
+          Logout
+        </Button>
+      </div>
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
         <Image
           className="dark:invert"
@@ -99,5 +122,13 @@ export default function Home() {
         </a>
       </footer>
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <ProtectedRoute>
+      <HomeContent />
+    </ProtectedRoute>
   );
 }
