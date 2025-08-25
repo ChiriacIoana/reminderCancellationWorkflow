@@ -19,8 +19,7 @@ import { useRouter } from 'next/navigation';
 
 const schema = z
     .object({
-        firstName: z.string().min(1, 'First name is required'),
-        lastName: z.string().min(1, 'Last name is required'),
+        name: z.string().min(1, 'Name is required'),
         email: z
             .string()
             .min(1, 'Email is required')
@@ -45,8 +44,7 @@ export default function RegisterPage() {
     const form = useForm({
         resolver: zodResolver(schema),
         defaultValues: {
-            firstName: '',
-            lastName: '',
+            name: '',
             email: '',
             password: '',
             repeatPassword: ''
@@ -74,25 +72,12 @@ export default function RegisterPage() {
         <AuthLayout title={'Register'} form={form} onSubmit={onSubmit}>
             <FormField
                 control={form.control}
-                name='firstName'
+                name='name'
                 render={({ field }) => (
                     <FormItem>
-                        <FormLabel>First name</FormLabel>
+                        <FormLabel>Name</FormLabel>
                         <FormControl>
-                            <Input placeholder='john' {...field} />
-                        </FormControl>
-                        <FormMessage />
-                    </FormItem>
-                )}
-            />
-            <FormField
-                control={form.control}
-                name='lastName'
-                render={({ field }) => (
-                    <FormItem>
-                        <FormLabel>Last name</FormLabel>
-                        <FormControl>
-                            <Input placeholder='Doe' {...field} />
+                            <Input placeholder='Doe John' {...field} />
                         </FormControl>
                         <FormMessage />
                     </FormItem>

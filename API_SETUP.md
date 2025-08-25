@@ -43,8 +43,7 @@ The backend should return user objects with this structure:
 ```typescript
 interface User {
     _id: string;
-    firstName: string;
-    lastName: string;
+    name: string;
     email: string;
     createdAt: string;
     updatedAt: string;
@@ -94,8 +93,7 @@ import { apiService } from '@/api/api';
 
 try {
     const response = await apiService.register({
-        firstName: 'John',
-        lastName: 'Doe',
+        name: 'John Doe',
         email: 'john@example.com',
         password: 'password123'
     });

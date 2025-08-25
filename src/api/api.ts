@@ -1,13 +1,12 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
 // API Configuration
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5500/api';
 
 // Types for API responses
 export interface User {
     _id: string;
-    firstName: string;
-    lastName: string;
+    name: string;
     email: string;
     createdAt: string;
     updatedAt: string;
@@ -19,8 +18,7 @@ export interface LoginRequest {
 }
 
 export interface RegisterRequest {
-    firstName: string;
-    lastName: string;
+    name: string;
     email: string;
     password: string;
 }
