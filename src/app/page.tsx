@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useAuth } from "../contexts/AuthContext";
-import { ProtectedRoute } from "../components/auth/ProtectedRoute";
+import { ProtectedRoute } from "../../components/auth/ProtectedRoute";
 import { Button } from "../../components/ui/button";
 
 function HomeContent() {

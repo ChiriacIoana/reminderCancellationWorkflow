@@ -23,18 +23,13 @@ export interface RegisterRequest {
     password: string;
 }
 
-export interface AuthResponse {
-    user: User;
-    token: string;
-    message: string;
-}
-
-export interface ApiResponse<T = any> {
+// Replace AuthResponse with an envelope type
+type ApiEnvelope<T> = {
     success: boolean;
-    data?: T;
     message?: string;
+    data?: T;
     error?: string;
-}
+};
 
 // Token management
 class TokenManager {
@@ -127,31 +122,35 @@ class ApiService {
     }
 
     // Authentication methods
-    async login(credentials: LoginRequest): Promise<AuthResponse> {
+    // login
+    async login(credentials: LoginRequest) {
         try {
-            const response: AxiosResponse<AuthResponse> = await this.api.post('/auth/login', credentials);
+            const response: AxiosResponse<ApiEnvelope<{ token: string; user: User }>> =
+                await this.api.post('/auth/login', credentials);
 
-            if (response.data.token) {
-                TokenManager.setToken(response.data.token);
-                TokenManager.setUser(response.data.user);
+            const { data } = response.data;
+            if (data?.token) {
+                TokenManager.setToken(data.token);
+                TokenManager.setUser(data.user);
             }
-
-            return response.data;
+            return data!;
         } catch (error: any) {
             throw this.handleError(error);
         }
     }
 
-    async register(userData: RegisterRequest): Promise<AuthResponse> {
+    // register
+    async register(userData: RegisterRequest) {
         try {
-            const response: AxiosResponse<AuthResponse> = await this.api.post('/auth/register', userData);
+            const response: AxiosResponse<ApiEnvelope<{ token: string; user: User }>> =
+                await this.api.post('/auth/register', userData);
 
-            if (response.data.token) {
-                TokenManager.setToken(response.data.token);
-                TokenManager.setUser(response.data.user);
+            const { data } = response.data;
+            if (data?.token) {
+                TokenManager.setToken(data.token);
+                TokenManager.setUser(data.user);
             }
-
-            return response.data;
+            return data!;
         } catch (error: any) {
             throw this.handleError(error);
         }
@@ -168,11 +167,15 @@ class ApiService {
         }
     }
 
+    // getCurrentUser
     async getCurrentUser(): Promise<User> {
         try {
-            const response: AxiosResponse<{ user: User }> = await this.api.get('/auth/me');
-            TokenManager.setUser(response.data.user);
-            return response.data.user;
+            const response: AxiosResponse<ApiEnvelope<{ user: User }>> =
+                await this.api.get('/auth/me');
+
+            const user = response.data.data?.user!;
+            TokenManager.setUser(user);
+            return user;
         } catch (error: any) {
             throw this.handleError(error);
         }

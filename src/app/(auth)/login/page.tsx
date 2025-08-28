@@ -24,8 +24,7 @@ const schema = z.object({
         .refine(validator.isEmail, { error: 'Invalid email address' }),
     password: z
         .string()
-        .min(6, 'Password must be at least 6 characters long')
-        .refine(validator.isStrongPassword, { error: 'Password must be strong' })
+        .min(1, 'Password is required')
 });
 
 export default function LoginPage() {
@@ -49,13 +48,14 @@ export default function LoginPage() {
 
         try {
             await login(data.email, data.password);
-            router.push('/'); // Redirect to home page after successful login
+            router.push('/welcome'); // Redirect after successful login
         } catch (err: any) {
             setError(err.message || 'Login failed. Please try again.');
         } finally {
             setIsLoading(false);
         }
     }
+
 
     return (
         <AuthLayout title={'Login'} form={form} onSubmit={onSubmit}>

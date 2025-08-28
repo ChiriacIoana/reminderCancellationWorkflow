@@ -60,7 +60,7 @@ export default function RegisterPage() {
             // Remove repeatPassword from the data sent to API
             const { repeatPassword, ...registerData } = data;
             await register(registerData);
-            router.push('/'); // Redirect to home page after successful registration
+            router.push('/welcome'); // Redirect after successful registration
         } catch (err: any) {
             setError(err.message || 'Registration failed. Please try again.');
         } finally {

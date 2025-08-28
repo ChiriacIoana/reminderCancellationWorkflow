@@ -37,8 +37,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 }
             } catch (error) {
                 console.error('Auth initialization error:', error);
-                // Clear invalid auth data
-                apiService.logout();
             } finally {
                 setIsLoading(false);
             }
