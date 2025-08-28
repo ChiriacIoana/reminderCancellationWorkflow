@@ -14,7 +14,7 @@ import { useForm } from 'react-hook-form';
 import * as validator from 'validator';
 import { z } from 'zod';
 import { useAuth } from '../../../contexts/AuthContext';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 const schema = z.object({

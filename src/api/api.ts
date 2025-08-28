@@ -119,10 +119,7 @@ class ApiService {
                 if (error.response?.status === 401) {
                     // Token expired or invalid
                     TokenManager.clearAuth();
-                    // Redirect to login page
-                    if (typeof window !== 'undefined') {
-                        window.location.href = '/login';
-                    }
+                    // Do not force redirect here; let route guards handle navigation
                 }
                 return Promise.reject(error);
             }

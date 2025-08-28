@@ -18,8 +18,8 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
-
-    const isAuthenticated = !!user;
+    // Consider presence of a token as authenticated during initial load to avoid redirect flicker
+    const isAuthenticated = !!user || apiService.isAuthenticated();
 
     useEffect(() => {
         // Check if user is already logged in on app start
