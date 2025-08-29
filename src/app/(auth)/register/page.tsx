@@ -120,7 +120,9 @@ export default function RegisterPage() {
                     <FormItem>
                         <FormLabel>Repeat password</FormLabel>
                         <FormControl>
-                            <Input placeholder='repeat password' {...field} />
+                            <Input placeholder='repeat password'
+                                {...field}
+                                type={'password'} />
                         </FormControl>
                         <FormMessage />
                     </FormItem>

@@ -38,7 +38,8 @@ class TokenManager {
 
     static getToken(): string | null {
         if (typeof window !== 'undefined') {
-            return localStorage.getItem(this.TOKEN_KEY);
+            const token = localStorage.getItem(this.TOKEN_KEY);
+            return (token && token !== 'undefined' && token !== 'null') ? token : null;
         }
         return null;
     }
@@ -167,6 +168,10 @@ class ApiService {
         }
     }
 
+    getToken(): string | null {
+        return TokenManager.getToken();
+    }
+
     // getCurrentUser
     async getCurrentUser(): Promise<User> {
         try {
@@ -180,6 +185,7 @@ class ApiService {
             throw this.handleError(error);
         }
     }
+
 
     // Generic API methods
     async get<T>(endpoint: string): Promise<T> {
@@ -248,3 +254,4 @@ export const apiService = new ApiService();
 
 // Export TokenManager for direct access if needed
 export { TokenManager };
+

@@ -11,11 +11,11 @@ import {
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import * as validator from 'validator';
 import { z } from 'zod';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import * as validator from "validator";
 
 const schema = z.object({
     email: z
@@ -49,6 +49,9 @@ export default function LoginPage() {
         try {
             await login(data.email, data.password);
             router.push('/welcome'); // Redirect after successful login
+            console.log('Form submitted with data:', data);
+            console.log('API URL:', process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5500/api');
+
         } catch (err: any) {
             setError(err.message || 'Login failed. Please try again.');
         } finally {
