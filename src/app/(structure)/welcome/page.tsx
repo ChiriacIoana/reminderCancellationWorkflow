@@ -1,15 +1,30 @@
 'use client';
 
 import { useAuth } from "../../../contexts/AuthContext";
-import { ProtectedRoute } from "../../../../components/auth/ProtectedRoute";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
+import { ProtectedRoute } from "../../../components/auth/ProtectedRoute";
+import { Card, CardHeader, CardTitle, CardContent } from "@/src/components/ui/card";
+import { Avatar, AvatarFallback } from "@/src/components/ui/avatar";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/src/components/ui/dropdown-menu";
+import { Button } from "@/src/components/ui/button";
 import { LogOut } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 function HomeContent() {
     const { user, logout } = useAuth();
+    const router = useRouter();
+
+    const handleLogout = async () => {
+        try {
+            await logout();
+            router.push('/logout');
+        } catch (error) {
+            console.error('Logout failed:', error);
+        }
+    };
+
+    const handleGoToDashboard = async () => {
+        router.push('/dashboard');
+    };
 
     return (
         <div className="font-sans min-h-screen flex items-center justify-center p-8 sm:p-20">
@@ -26,7 +41,7 @@ function HomeContent() {
                             </Avatar>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={logout} className="flex items-center gap-2">
+                            <DropdownMenuItem onClick={handleLogout} className="flex items-center gap-2">
                                 <LogOut className="h-4 w-4" /> Logout
                             </DropdownMenuItem>
                         </DropdownMenuContent>
@@ -37,7 +52,7 @@ function HomeContent() {
                     <p className="text-muted-foreground">
                         You are now logged in and can access your dashboard.
                     </p>
-                    <Button variant="default" className="w-full">
+                    <Button onClick={handleGoToDashboard} variant="default" className="w-full">
                         Go to Dashboard
                     </Button>
                 </CardContent>

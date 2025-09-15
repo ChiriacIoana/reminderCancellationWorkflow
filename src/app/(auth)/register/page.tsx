@@ -1,14 +1,14 @@
 'use client';
-import { AuthLayout } from '@/components/auth/auth-layout';
-import { Button } from '@/components/ui/button';
+import { AuthLayout } from '@/src/components/auth/auth-layout';
+import { Button } from '@/src/components/ui/button';
 import {
     FormControl,
     FormField,
     FormItem,
     FormLabel,
     FormMessage
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+} from '@/src/components/ui/form';
+import { Input } from '@/src/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as validator from 'validator';

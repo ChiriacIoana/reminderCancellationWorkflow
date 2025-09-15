@@ -1,4 +1,4 @@
-import { Form } from '@/components/ui/form';
+import { Form } from '@/src/components/ui/form';
 import { ReactNode } from 'react';
 import { FieldValues, UseFormReturn } from "react-hook-form";
 
