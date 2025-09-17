@@ -1,7 +1,9 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { apiService, TokenManager, User } from '../api/api';
+import { apiService} from '../api/api';
+import { AuthService, authService, User } from '../api/auth';
+import { TokenManager } from '../api/auth';
 
 interface AuthContextType {
     user: User | null;
@@ -19,19 +21,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     // Consider presence of a token as authenticated during initial load to avoid redirect flicker
-    const isAuthenticated = !!user || (!!apiService.getToken());
+    const isAuthenticated = !!user || (!!TokenManager.getToken());
 
     useEffect(() => {
         // Check if user is already logged in on app start
         const initializeAuth = async () => {
             try {
-                if (apiService.isAuthenticated()) {
-                    const storedUser = apiService.getStoredUser();
+                if (authService.isAuthenticated()) {
+                    const storedUser = authService.getStoredUser();
                     if (storedUser) {
                         setUser(storedUser);
                     } else {
                         // Try to get fresh user data from server
-                        const freshUser = await apiService.getCurrentUser();
+                        const freshUser = await authService.getCurrentUser();
                         setUser(freshUser);
                     }
                 }
@@ -46,25 +48,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }, []);
 
     const login = async (email: string, password: string) => {
-        const response = await apiService.login({ email, password });
-        console.log('[Auth] Login success:', response);
-        setUser(response.user);
-    };
+  const { user } = await authService.login({ email, password });
+  console.log('[Auth] Login success:', user);
+  setUser(user);
+};
 
     const register = async (userData: { name: string; email: string; password: string }) => {
-        const response = await apiService.register(userData);
+        const response = await authService.register(userData);
         console.log('[Auth] Register success:', response);
         setUser(response.user);
     };
 
     const logout = async () => {
-        await apiService.logout();
+        await authService.logout();
         setUser(null);
     };
 
     const refreshUser = async () => {
         try {
-            const freshUser = await apiService.getCurrentUser();
+            const freshUser = await authService.getCurrentUser();
             setUser(freshUser);
         } catch (error) {
             console.error('Failed to refresh user:', error);
