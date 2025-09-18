@@ -27,6 +27,7 @@ class ApiService {
     this.api.interceptors.request.use(
       (config) => {
         const token = TokenManager.getToken();
+        //console.log("Attaching token:", token); //plang
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }

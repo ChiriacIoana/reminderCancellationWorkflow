@@ -62,7 +62,12 @@ export default function RegisterPage() {
             await register(registerData);
             router.push('/welcome'); // Redirect after successful registration
         } catch (err: any) {
-            setError(err.message || 'Registration failed. Please try again.');
+            const message =
+                err.response?.data?.message ||
+                err.message ||
+                'Registration failed. Please try again.';
+            setError(message);
+            console.log(err.response?.data?.message);
         } finally {
             setIsLoading(false);
         }
@@ -129,8 +134,18 @@ export default function RegisterPage() {
                 )}
             />
             {error && (
-                <div className="text-red-500 text-sm text-center mb-4">
-                    {error}
+                <div className="text-center mb-4">
+                    <p className="text-red-500 text-sm">{error}</p>
+                    {error === 'User already exists' && (
+                        <Button
+                            type="button"
+                            variant="outline"
+                            className="mt-2"
+                            onClick={() => router.push('/login')}
+                        >
+                            Go to Login
+                        </Button>
+                    )}
                 </div>
             )}
             <Button type='submit' className={'w-full'} disabled={isLoading}>

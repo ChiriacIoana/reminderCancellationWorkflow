@@ -86,6 +86,10 @@ export class AuthService {
       await apiService.post("/auth/login", credentials);
 
     const data = response.data;
+    const token = response.data?.token;
+     if (token) {
+      TokenManager.setToken(token); 
+    }
     if (data?.token) {
       TokenManager.setToken(data.token);
       TokenManager.setUser(data.user);
