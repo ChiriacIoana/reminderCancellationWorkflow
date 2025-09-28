@@ -1,6 +1,6 @@
 'use client';
 
-import { getUserSubscriptions } from '@/src/api/subscriptionService';
+import { cancelSubscription, getUserSubscriptions } from '@/src/api/subscriptionService';
 import GlowButton from '@/src/components/common/glow-button';
 import Header from '@/src/components/common/header';
 import MainCard from '@/src/components/common/main-card';
@@ -129,6 +129,28 @@ export default function Page() {
     console.log('Create new subscription');
   };
 
+  const handleCancelSubscription = async (subscriptionId: string) => {
+  try {
+    const cancelled = await cancelSubscription(subscriptionId);
+
+    setSubscriptions((prev) =>
+      prev.map((sub) =>
+        sub.id === subscriptionId ? { ...sub, status: cancelled.status } : sub
+      )
+    );
+
+    // Update localStorage too
+    const updatedSubs = subscriptions.map((sub) =>
+      sub.id === subscriptionId ? { ...sub, status: cancelled.status } : sub
+    );
+    localStorage.setItem('subscriptions', JSON.stringify(updatedSubs));
+
+    console.log(`Subscription ${subscriptionId} cancelled`);
+  } catch (error) {
+    console.error('Error cancelling subscription:', error);
+  }
+};
+
   // Filter subscriptions based on selected filter
   const filteredSubscriptions = subscriptions.filter(sub => {
     if (selectedFilter === 'all') return true;
@@ -222,6 +244,7 @@ export default function Page() {
                   category === 'Software' ? <Users size={18} /> : 
                   <DollarSign size={18} />}
             items={items}
+            handleCancelSubscription={handleCancelSubscription}
           >
             <div className='flex gap-4 p-2 text-black'>
               <div className='flex flex-col rounded-xl bg-gray-100 px-5 py-4 shadow-sm'>

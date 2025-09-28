@@ -20,6 +20,7 @@ type SubscriptionModalLayoutProps = {
   subscriptionId: string;
   nextBilling: string;
   setModalOpen: (open: boolean) => void;
+  handleCancelSubscription: (subscriptionId: string) => void;
 };
 
 export default function SubscriptionModalLayout({
@@ -30,7 +31,8 @@ export default function SubscriptionModalLayout({
   lastPayment,
   subscriptionId,
   nextBilling,
-  setModalOpen
+  setModalOpen,
+  handleCancelSubscription
 }: SubscriptionModalLayoutProps) {
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -204,6 +206,7 @@ export default function SubscriptionModalLayout({
             <Button 
               variant='outline' 
               className='flex items-center gap-2 text-red-600 hover:bg-red-50 border-red-200'
+              onClick={() => handleCancelSubscription(subscriptionId)}
             >
               <AlertCircle className='h-4 w-4' />
               Cancel Subscription
