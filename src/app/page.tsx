@@ -4,6 +4,9 @@ import Image from "next/image";
 import { useAuth } from "../contexts/AuthContext";
 import { ProtectedRoute } from "../components/auth/ProtectedRoute";
 import { Button } from "../components/ui/button";
+import { Router } from "lucide-react";
+import router from "next/dist/shared/lib/router/router";
+import { redirect } from "next/dist/server/api-utils";
 
 function HomeContent() {
   const { user, logout } = useAuth();

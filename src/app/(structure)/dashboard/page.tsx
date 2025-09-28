@@ -1,9 +1,11 @@
 'use client';
 
+import { getUserSubscriptions } from '@/src/api/subscriptionService';
 import GlowButton from '@/src/components/common/glow-button';
 import Header from '@/src/components/common/header';
 import MainCard from '@/src/components/common/main-card';
 import SearchBar from '@/src/components/common/search-bar';
+import { get } from 'http';
 import {
   CreditCard,
   Calendar,
@@ -12,6 +14,7 @@ import {
   Users,
   DollarSign
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
 type Subscription = {
@@ -27,6 +30,7 @@ type Subscription = {
 };
 
 export default function Page() {
+  const router = useRouter();
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
@@ -103,23 +107,25 @@ export default function Page() {
   const loadSubscriptions = async () => {
     try {
       setLoading(true);
-      // TODO: Replace with actual API call when ready
-      // const response = await apiService.get('/subscriptions');
-      // setSubscriptions(response.data);
       
-      // For now, use mock data
       setTimeout(() => {
-        setSubscriptions(mockSubscriptions);
+        //load mock data
+        const initial = mockSubscriptions;
+        //load any saved subs from localStorage
+        const saved = JSON.parse(localStorage.getItem('subscriptions') || '[]');
+        //merge them together
+        setSubscriptions([...initial, ...saved]);
         setLoading(false);
-      }, 1000);
+      }, 1000)
     } catch (error) {
       console.error('Error loading subscriptions:', error);
+    } finally {
       setLoading(false);
     }
   };
 
   const handleCreateSubscription = () => {
-    // TODO: Implement subscription creation
+    router.push('/new');
     console.log('Create new subscription');
   };
 
