@@ -24,7 +24,7 @@ export default function NewSubscriptionPage() {
     setError(null);
 
     try {
-      await createSubscription({
+       const created = await createSubscription({
         name,
         price:parseFloat(price),
         category,
@@ -35,20 +35,20 @@ export default function NewSubscriptionPage() {
       });
 
       //save to localStorage
-      const newSub = {
-        //nush inca ce sa fac aici la id
-        id: `SUB-${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
-        name,
-        price: parseFloat(price),
-        status: 'active',
-        startDate: new Date().toISOString(),
-        nextBillingDate: new Date().toISOString(),
-        lastPayment: 'just now',
-        category: category,
-      };
+      // const newSub = {
+      //   //nush inca ce sa fac aici la id
+      //   id: `SUB-${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
+      //   name,
+      //   price: parseFloat(price),
+      //   status: 'active',
+      //   startDate: new Date().toISOString(),
+      //   nextBillingDate: new Date().toISOString(),
+      //   lastPayment: 'just now',
+      //   category: category,
+      // };
 
       const existingSub = JSON.parse(localStorage.getItem('subscriptions') || '[]');
-      localStorage.setItem('subscriptions', JSON.stringify([...existingSub, newSub]));
+      localStorage.setItem('subscriptions', JSON.stringify([...existingSub, created]));
 
       router.push('/dashboard'); // redirect after success
     } catch (err: any) {

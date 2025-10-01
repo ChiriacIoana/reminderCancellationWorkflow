@@ -181,6 +181,8 @@ export default function MainCard({
           <Modal isOpen={modalOpen}>
             <ModalLayout
               // Map subscription data to expected ModalLayout props
+              cancelId={selectedSubscription.subscriptionId}
+              isMock={false} // Set to true if this is mock data
               serviceName={selectedSubscription.service}
               category={selectedSubscription.category}
               price={selectedSubscription.price}

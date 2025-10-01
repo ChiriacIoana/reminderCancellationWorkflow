@@ -40,7 +40,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <Logo />
                 </div>
                 <span className='text-base font-semibold text-white'>
-                  Lightway
+                  SubDash
                 </span>
               </Link>
             </SidebarMenuButton>
@@ -66,22 +66,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild className='rounded-md'>
-              <Link
-                href='/lights'
-                className={cn(
-                  'flex items-center gap-2 rounded-md px-2 py-1',
-                  pathname === '/lights'
-                    ? 'bg-white/10 text-white'
-                    : 'text-white/60 hover:text-white'
-                )}
-              >
-                <Lightbulb className='h-5 w-5 text-white/60' />
-                <span className='text-white'>Lights</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+          
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
               <Link
@@ -121,15 +106,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <div className='space-y-3 p-2'>
         <div className='flex flex-col gap-3 rounded-[28px] bg-stone-900 p-3'>
           <NotificationCard
-            title='Ad Request from Sephora'
+            title='Ad Request from Netflix'
             time='12m'
-            location='at AFI Brasov'
+            location='Films & Series'
             stackIndex={0}
           />
           <NotificationCard
-            title='Ad Request from Nike'
+            title='Ad Request from Spotify'
             time='18m'
-            location='at Mega Mall'
+            location='Music'
             stackIndex={1}
             offset
           />
@@ -169,8 +154,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarFooter className='text-white'>
         <NavUser
           user={{
-            name: 'Alexandru Simedrea',
-            email: 'CNI Gr. Moisil',
+            name: 'ioana',
+            email: 'ioana@email.com',
             avatar: '/avatars/shadcn.jpg'
           }}
         />

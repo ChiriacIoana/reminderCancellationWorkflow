@@ -22,6 +22,7 @@ export async function getUserSubscriptions(userId: string): Promise<Subscription
   // AxiosResponse
   const response: AxiosResponse<Subscription[]> = await apiService.get(`/v1/subscriptions/user/${userId}`);
   return response.data; 
+  
 }
 
 // Create a new subscription

@@ -18,7 +18,8 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
 type Subscription = {
-  id: string;
+  _id?: string; // MongoDB ID
+  id?: string; // local ID for frontend use
   name: string;
   price: number;
   status: 'active' | 'cancelled' | 'expired' | 'pending';
@@ -129,19 +130,31 @@ export default function Page() {
     console.log('Create new subscription');
   };
 
-  const handleCancelSubscription = async (subscriptionId: string) => {
-  try {
-    const cancelled = await cancelSubscription(subscriptionId);
-
-    setSubscriptions((prev) =>
-      prev.map((sub) =>
-        sub.id === subscriptionId ? { ...sub, status: cancelled.status } : sub
+  const handleCancelSubscription = async (subscriptionId: string, isMock?: boolean) => {
+  if (isMock) {
+    // Just update local state for mock subscriptions
+    setSubscriptions(prev =>
+      prev.map(sub =>
+        sub.id === subscriptionId ? { ...sub, status: 'cancelled' } : sub
       )
     );
+    const updatedSubs = subscriptions.map(sub =>
+      sub.id === subscriptionId ? { ...sub, status: 'cancelled' } : sub
+    );
+    localStorage.setItem('subscriptions', JSON.stringify(updatedSubs));
+    console.log(`Mock subscription ${subscriptionId} cancelled locally`);
+    return;
+  }
 
-    // Update localStorage too
-    const updatedSubs = subscriptions.map((sub) =>
-      sub.id === subscriptionId ? { ...sub, status: cancelled.status } : sub
+  try {
+    const cancelled = await cancelSubscription(subscriptionId); // Only real _id
+    setSubscriptions(prev =>
+      prev.map(sub =>
+        sub._id === subscriptionId ? { ...sub, status: cancelled.status } : sub
+      )
+    );
+    const updatedSubs = subscriptions.map(sub =>
+      sub._id === subscriptionId ? { ...sub, status: cancelled.status } : sub
     );
     localStorage.setItem('subscriptions', JSON.stringify(updatedSubs));
 
@@ -150,6 +163,7 @@ export default function Page() {
     console.error('Error cancelling subscription:', error);
   }
 };
+
 
   // Filter subscriptions based on selected filter
   const filteredSubscriptions = subscriptions.filter(sub => {
@@ -166,7 +180,10 @@ export default function Page() {
       groups[category] = [];
     }
     groups[category].push({
-      label: subscription.id.split('-')[1], // Use part of ID as label
+      label: subscription.id
+      ? subscription.id.split('-')[1] // use fake id
+      : subscription._id?.slice(-6).toUpperCase() || 'UNKNOWN', // fallback for Mongo
+
       service: subscription.name,
       price: subscription.price,
       status: subscription.status,

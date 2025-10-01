@@ -12,6 +12,8 @@ import {
 } from 'lucide-react';
 
 type SubscriptionModalLayoutProps = {
+  cancelId: string;      // either _id or id
+  isMock?: boolean;      // true if mock data
   serviceName: string;
   category: string;
   price: number;
@@ -20,10 +22,12 @@ type SubscriptionModalLayoutProps = {
   subscriptionId: string;
   nextBilling: string;
   setModalOpen: (open: boolean) => void;
-  handleCancelSubscription: (subscriptionId: string) => void;
+ handleCancelSubscription: (subscriptionId: string, isMock?: boolean) => void;
 };
 
 export default function SubscriptionModalLayout({
+  cancelId,
+  isMock = false,
   serviceName,
   category,
   price,
@@ -206,7 +210,7 @@ export default function SubscriptionModalLayout({
             <Button 
               variant='outline' 
               className='flex items-center gap-2 text-red-600 hover:bg-red-50 border-red-200'
-              onClick={() => handleCancelSubscription(subscriptionId)}
+              onClick={() => handleCancelSubscription(cancelId, isMock)}
             >
               <AlertCircle className='h-4 w-4' />
               Cancel Subscription
