@@ -12,6 +12,7 @@ type MainCardProps = {
   icon?: React.ReactNode;
   children?: React.ReactNode;
   handleCancelSubscription: (subscriptionId: string) => void;
+  handleDeleteSubscription: (subscriptionId: string, isMock?: boolean) => void;
 };
 
 type SubscriptionData = {
@@ -121,6 +122,7 @@ export default function MainCard({
   icon,
   children,
   handleCancelSubscription,
+  handleDeleteSubscription,
   ...props
 }: MainCardProps & React.ComponentProps<typeof Card>) {
   const [modalOpen, setModalOpen] = useState(false);
@@ -192,6 +194,7 @@ export default function MainCard({
               subscriptionId={selectedSubscription.subscriptionId}
               setModalOpen={setModalOpen}
               handleCancelSubscription={handleCancelSubscription}
+              handleDeleteSubscription={handleDeleteSubscription}
             />
           </Modal>
         )}

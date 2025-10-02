@@ -23,6 +23,7 @@ type SubscriptionModalLayoutProps = {
   nextBilling: string;
   setModalOpen: (open: boolean) => void;
  handleCancelSubscription: (subscriptionId: string, isMock?: boolean) => void;
+  handleDeleteSubscription: (subscriptionId: string, isMock?: boolean) => void;
 };
 
 export default function SubscriptionModalLayout({
@@ -36,7 +37,8 @@ export default function SubscriptionModalLayout({
   subscriptionId,
   nextBilling,
   setModalOpen,
-  handleCancelSubscription
+  handleCancelSubscription,
+  handleDeleteSubscription
 }: SubscriptionModalLayoutProps) {
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -94,9 +96,10 @@ export default function SubscriptionModalLayout({
           variant='outline'
           size='sm'
           className='flex cursor-pointer items-center rounded-xl text-red-600 hover:bg-red-50'
+          onClick={() => handleDeleteSubscription(cancelId, isMock)}
         >
           <AlertCircle className='h-4 w-4' />
-          Cancel
+          Delete
         </Button>
         <Button
           variant='outline'
@@ -212,9 +215,9 @@ export default function SubscriptionModalLayout({
               className='flex items-center gap-2 text-red-600 hover:bg-red-50 border-red-200'
               onClick={() => handleCancelSubscription(cancelId, isMock)}
             >
-              <AlertCircle className='h-4 w-4' />
-              Cancel Subscription
-            </Button>
+  <AlertCircle className='h-4 w-4' />
+  Cancel Subscription
+</Button>
             <Button 
               variant='default' 
               className='flex items-center gap-2 bg-blue-600 hover:bg-blue-700'

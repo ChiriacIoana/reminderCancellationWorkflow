@@ -1,11 +1,10 @@
 'use client';
 
-import { cancelSubscription, getUserSubscriptions } from '@/src/api/subscriptionService';
+import { useSubscriptions, type Subscription } from '@/src/api/useSubscriptions';
 import GlowButton from '@/src/components/common/glow-button';
 import Header from '@/src/components/common/header';
 import MainCard from '@/src/components/common/main-card';
 import SearchBar from '@/src/components/common/search-bar';
-import { get } from 'http';
 import {
   CreditCard,
   Calendar,
@@ -17,25 +16,19 @@ import {
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
-type Subscription = {
-  _id?: string; // MongoDB ID
-  id?: string; // local ID for frontend use
-  name: string;
-  price: number;
-  status: 'active' | 'cancelled' | 'expired' | 'pending';
-  startDate: string;
-  nextBillingDate: string;
-  lastPayment: string;
-  category: string;
-  description?: string;
-};
-
 export default function Page() {
   const router = useRouter();
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState('all');
-  const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
-  const [loading, setLoading] = useState(true);
+  
+  const {
+    subscriptions,
+    setSubscriptions,
+    loading,
+    setLoading,
+    handleCancelSubscription,
+    handleDeleteSubscription
+  } = useSubscriptions();
 
   // Mock data - replace with actual API call
   const mockSubscriptions: Subscription[] = [
@@ -105,19 +98,15 @@ export default function Page() {
     loadSubscriptions();
   }, []);
 
-  const loadSubscriptions = async () => {
+   const loadSubscriptions = async () => {
     try {
       setLoading(true);
-      
       setTimeout(() => {
-        //load mock data
         const initial = mockSubscriptions;
-        //load any saved subs from localStorage
         const saved = JSON.parse(localStorage.getItem('subscriptions') || '[]');
-        //merge them together
         setSubscriptions([...initial, ...saved]);
         setLoading(false);
-      }, 1000)
+      }, 1000);
     } catch (error) {
       console.error('Error loading subscriptions:', error);
     } finally {
@@ -130,40 +119,6 @@ export default function Page() {
     console.log('Create new subscription');
   };
 
-  const handleCancelSubscription = async (subscriptionId: string, isMock?: boolean) => {
-  if (isMock) {
-    // Just update local state for mock subscriptions
-    setSubscriptions(prev =>
-      prev.map(sub =>
-        sub.id === subscriptionId ? { ...sub, status: 'cancelled' } : sub
-      )
-    );
-    const updatedSubs = subscriptions.map(sub =>
-      sub.id === subscriptionId ? { ...sub, status: 'cancelled' } : sub
-    );
-    localStorage.setItem('subscriptions', JSON.stringify(updatedSubs));
-    console.log(`Mock subscription ${subscriptionId} cancelled locally`);
-    return;
-  }
-
-  try {
-    const cancelled = await cancelSubscription(subscriptionId); // Only real _id
-    setSubscriptions(prev =>
-      prev.map(sub =>
-        sub._id === subscriptionId ? { ...sub, status: cancelled.status } : sub
-      )
-    );
-    const updatedSubs = subscriptions.map(sub =>
-      sub._id === subscriptionId ? { ...sub, status: cancelled.status } : sub
-    );
-    localStorage.setItem('subscriptions', JSON.stringify(updatedSubs));
-
-    console.log(`Subscription ${subscriptionId} cancelled`);
-  } catch (error) {
-    console.error('Error cancelling subscription:', error);
-  }
-};
-
 
   // Filter subscriptions based on selected filter
   const filteredSubscriptions = subscriptions.filter(sub => {
@@ -175,25 +130,27 @@ export default function Page() {
 
   // Group subscriptions by category
   const groupedSubscriptions = filteredSubscriptions.reduce((groups, subscription) => {
-    const category = subscription.category;
-    if (!groups[category]) {
-      groups[category] = [];
-    }
-    groups[category].push({
-      label: subscription.id
-      ? subscription.id.split('-')[1] // use fake id
-      : subscription._id?.slice(-6).toUpperCase() || 'UNKNOWN', // fallback for Mongo
-
-      service: subscription.name,
-      price: subscription.price,
-      status: subscription.status,
-      nextBilling: subscription.nextBillingDate,
-      lastPayment: subscription.lastPayment,
-      subscriptionId: subscription.id,
-      category: subscription.category
-    });
-    return groups;
-  }, {} as Record<string, any[]>);
+  const category = subscription.category;
+  if (!groups[category]) {
+    groups[category] = [];
+  }
+  groups[category].push({
+    label: subscription.id
+      ? subscription.id.split('-')[1] // mock subscription
+      : subscription._id?.slice(-6).toUpperCase() || 'UNKNOWN', // real subscription
+    service: subscription.name,
+    price: subscription.price,
+    status: subscription.status,
+    nextBilling: subscription.nextBillingDate,
+    lastPayment: subscription.lastPayment,
+    // Pass the actual ID (_id for real, id for mock)
+    cancelId: subscription._id || subscription.id || '',
+    isMock: !subscription._id, // true if no MongoDB _id
+    subscriptionId: subscription.id || subscription._id || '',
+    category: subscription.category
+  });
+  return groups;
+}, {} as Record<string, any[]>);
 
   const totalSubscriptions = subscriptions.length;
   const activeSubscriptions = subscriptions.filter(s => s.status === 'active').length;
@@ -262,6 +219,7 @@ export default function Page() {
                   <DollarSign size={18} />}
             items={items}
             handleCancelSubscription={handleCancelSubscription}
+            handleDeleteSubscription={handleDeleteSubscription}
           >
             <div className='flex gap-4 p-2 text-black'>
               <div className='flex flex-col rounded-xl bg-gray-100 px-5 py-4 shadow-sm'>
