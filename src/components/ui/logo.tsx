@@ -3,7 +3,7 @@ import Image from 'next/image';
 export default function Logo({ className }: { className?: string }) {
   return (
     <Image
-      src='/'
+      src='/SD_logo_v1.svg'
       alt='SubDash Logo'
       width={30}
       height={10}

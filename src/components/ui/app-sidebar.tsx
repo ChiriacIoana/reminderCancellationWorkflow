@@ -13,7 +13,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem
 } from '@/src/components/ui/sidebar';
-import { IconPlus } from '@tabler/icons-react';
+import { IconPlus, IconUserCircle } from '@tabler/icons-react';
 import {
   Building2,
   ChartColumnBig,
@@ -53,6 +53,23 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
               <Link
+                href='/account'
+                className={cn(
+                  'flex items-center gap-2 rounded-md px-2 py-1',
+                  pathname === '/account'
+                    ? 'bg-white/10 text-white'
+                    : 'text-white/60 hover:text-white'
+                )}
+              >
+                <IconUserCircle className='h-5 w-5 text-white/60' />
+                <span className='text-white'>Account</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <Link
                 href='/dashboard'
                 className={cn(
                   'flex items-center gap-2 rounded-md px-2 py-1',
@@ -63,23 +80,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               >
                 <LayoutDashboard className='h-5 w-5 text-white/60' />
                 <span className='text-white'>Dashboard</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link
-                href='/properties'
-                className={cn(
-                  'flex items-center gap-2 rounded-md px-2 py-1',
-                  pathname === '/properties'
-                    ? 'bg-white/10 text-white'
-                    : 'text-white/60 hover:text-white'
-                )}
-              >
-                <Building2 className='h-5 w-5 text-white/60' />
-                <span className='text-white'>Properties</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

@@ -100,6 +100,13 @@ export default function LoginPage() {
             <Button type='submit' className={'w-full'} disabled={isLoading}>
                 {isLoading ? 'Logging in...' : 'Login'}
             </Button>
+            <div className='text-black-500 text-sm text-center mt-4'>
+            Don't have an account?{' '}
+            <a href='/register' className='text-blue-500 underline'>
+                Register here
+            </a>
+        </div>
         </AuthLayout>
+        
     );
 }

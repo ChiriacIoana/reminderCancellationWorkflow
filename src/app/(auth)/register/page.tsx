@@ -151,6 +151,12 @@ export default function RegisterPage() {
             <Button type='submit' className={'w-full'} disabled={isLoading}>
                 {isLoading ? 'Creating account...' : 'Create Account'}
             </Button>
+            <div className='text-black-500 text-sm text-center mt-4'>
+            Already have an account?{' '}
+            <a href='/login' className='text-blue-500 underline'>
+                Login here
+            </a>
+        </div>
         </AuthLayout>
     );
 }
