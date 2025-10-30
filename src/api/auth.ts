@@ -146,21 +146,12 @@ export class AuthService {
   }
 
 async updateProfile(updatedData: Partial<User>): Promise<User> {
-  const response: AxiosResponse<{ success: boolean; message: string; data: User }> =
-    await apiService.put("/users/me", updatedData);
+  const user = await apiService.put<User>("/users/me", updatedData);
   
-    console.log("Full response:", response); // Add this
-  console.log("response.data:", response.data); // And this
-  console.log("response.data.data:", response.data?.data); // And this
-  
-  const user = response.data?.data; 
-  if (!user) {
-    throw new Error("Failed to update profile: no user returned from API");
-  }
-
   TokenManager.setUser(user);
   return user;
 }
+
 };
 
 export const authService = new AuthService();
