@@ -54,12 +54,21 @@ export class TokenManager {
   }
 
   static getUser(): User | null {
-    if (typeof window !== "undefined") {
-      const userData = localStorage.getItem(this.USER_KEY);
-      return userData ? JSON.parse(userData) : null;
+  if (typeof window !== "undefined") {
+    const userData = localStorage.getItem(this.USER_KEY);
+    // Check for invalid values
+    if (userData && userData !== "undefined" && userData !== "null") {
+      try {
+        return JSON.parse(userData);
+      } catch (error) {
+        console.error("Failed to parse user data:", error);
+        localStorage.removeItem(this.USER_KEY); // Clear invalid data
+        return null;
+      }
     }
-    return null;
   }
+  return null;
+}
 
   static setUser(user: User): void {
     if (typeof window !== "undefined") {
@@ -135,6 +144,23 @@ export class AuthService {
   getStoredUser(): User | null {
     return TokenManager.getUser();
   }
+
+async updateProfile(updatedData: Partial<User>): Promise<User> {
+  const response: AxiosResponse<{ success: boolean; message: string; data: User }> =
+    await apiService.put("/users/me", updatedData);
+  
+    console.log("Full response:", response); // Add this
+  console.log("response.data:", response.data); // And this
+  console.log("response.data.data:", response.data?.data); // And this
+  
+  const user = response.data?.data; 
+  if (!user) {
+    throw new Error("Failed to update profile: no user returned from API");
+  }
+
+  TokenManager.setUser(user);
+  return user;
 }
+};
 
 export const authService = new AuthService();
