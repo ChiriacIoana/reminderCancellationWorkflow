@@ -17,6 +17,7 @@ import { Switch } from '@/src/components/ui/switch';
 import { Separator } from '@/src/components/ui/separator';
 import ProfileForm from './profile';
 import PasswordForm from './password';
+import DeleteForm from './delete';
 
 export default function Page() {
   const [emailNotif, setEmailNotif] = useState(true);
@@ -87,7 +88,6 @@ export default function Page() {
           </Card>
         </TabsContent>
 
-        {/* DANGER ZONE TAB */}
         <TabsContent value="danger">
           <Card className="border-destructive">
             <CardHeader>
@@ -96,26 +96,7 @@ export default function Page() {
                 Irreversible actions — proceed with caution.
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h4 className="font-medium">Delete Account</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Permanently remove your account and all subscriptions.
-                  </p>
-                </div>
-                <Button variant="destructive">Delete Account</Button>
-              </div>
-              <div className="flex items-center justify-between">
-                <div>
-                  <h4 className="font-medium">Export Data</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Download all your tracked subscriptions as a CSV.
-                  </p>
-                </div>
-                <Button variant="outline">Export</Button>
-              </div>
-            </CardContent>
+            <DeleteForm />
           </Card>
         </TabsContent>
       </Tabs>

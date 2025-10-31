@@ -164,6 +164,18 @@ async changePassword(currentPassword: string, newPassword: string): Promise<void
 
 };
 
+async deleteAccount(): Promise<void> {
+  const res = await apiService.delete<{ success: boolean; message: string }>(
+    "/users/me"
+  );
+
+  if (!res.success) {
+    throw new Error(res.message || "Failed to delete account");
+  }
+
+  TokenManager.clearAuth();
+}
+
 };
 
 export const authService = new AuthService();
