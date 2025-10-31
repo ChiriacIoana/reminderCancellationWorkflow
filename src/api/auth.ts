@@ -152,6 +152,18 @@ async updateProfile(updatedData: Partial<User>): Promise<User> {
   return user;
 }
 
+async changePassword(currentPassword: string, newPassword: string): Promise<void> {
+  const res = await apiService.put<{ success: boolean; message: string }>(
+    "/users/me/password",
+    { currentPassword, newPassword }
+  );
+
+   if (!res.success) {
+    throw new Error(res.message || "Failed to change password");
+  }
+
+};
+
 };
 
 export const authService = new AuthService();

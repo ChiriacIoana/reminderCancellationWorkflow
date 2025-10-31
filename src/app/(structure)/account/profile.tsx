@@ -62,7 +62,7 @@ const handleSubmit = async (e: React.FormEvent) => {
     <form onSubmit={handleSubmit} className="mb-8">
     <div className="grid gap-4 space-y-4 sm:grid-cols-2">
     
-        <div className="flex flex-col gap-2 p-4">
+        <div className="flex flex-col space-y-2 m-4 ml-7">
               <Label htmlFor="name">Full Name</Label>
               <Input
                 id="name"
@@ -71,7 +71,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                 placeholder="John Doe"
               />
             </div>
-            <div className="flex flex-col gap-2 p-4">
+            <div className="flex flex-col space-y-2 m-4">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"

@@ -36,8 +36,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton asChild className='p-0 hover:bg-transparent'>
               <Link href='/dashboard' className='flex items-center gap-2'>
-                <div className='rounded-full drop-shadow-[0_0_2px_rgba(96,165,250,0.8)]'>
-                  <img src="/SD_logo_v1.png" alt="Logo" />
+                <div className='rounded-full'>
+                  <Logo className='rounded-full' />
                 </div>
                 <span className='text-base font-semibold text-white'>
                   SubDash
